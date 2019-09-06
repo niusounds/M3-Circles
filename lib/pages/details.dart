@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as urlLauncher;
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as customTabs;
+
 import '../circle.dart';
 
 class DetailsPage extends StatelessWidget {
@@ -9,13 +11,13 @@ class DetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         title: const Text('サークル詳細'),
       ),
-      body: new Padding(
+      body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: new CircleCard(circle: circle),
+        child: CircleCard(circle: circle),
       ),
     );
   }
@@ -27,35 +29,35 @@ class CircleCard extends StatelessWidget {
   const CircleCard({Key key, this.circle}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) => new Card(
-        child: new Column(
+  Widget build(BuildContext context) => Card(
+        child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new ListTile(
-              leading: new Text(
+            ListTile(
+              leading: Text(
                 '${circle.space.group}-${circle.space.number}',
               ),
-              title: new Text(circle.name),
+              title: Text(circle.name),
             ),
-            new Container(
+            Container(
               padding: const EdgeInsets.all(16.0),
-              child: new Text(circle.pr),
+              child: Text(circle.pr),
             ),
-            new Container(
+            Container(
               padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: new Text(
+              child: Text(
                 'キーワード: ${circle.keywords.join(', ')}',
-                style: new TextStyle(
+                style: TextStyle(
                   fontSize: 12.0,
                   color: Colors.grey,
                 ),
               ),
             ),
-            new ButtonTheme.bar(
-              child: new ButtonBar(
+            ButtonTheme.bar(
+              child: ButtonBar(
                 children: <Widget>[
-                  new WebsiteButton(
+                  WebsiteButton(
                     url: circle.website.url,
                   )
                 ],
@@ -83,7 +85,7 @@ class WebsiteButtonState extends State<WebsiteButton> {
     super.initState();
     enabled = false;
 
-    canLaunch(widget.url).then((result) {
+    urlLauncher.canLaunch(widget.url).then((result) {
       setState(() {
         enabled = result;
       });
@@ -92,12 +94,15 @@ class WebsiteButtonState extends State<WebsiteButton> {
 
   @override
   Widget build(BuildContext context) {
-    return new FlatButton(
+    return FlatButton(
       child: const Text('Webサイトを開く'),
       onPressed: enabled
           ? () async {
-              if (await canLaunch(widget.url)) {
-                await launch(widget.url);
+              if (await urlLauncher.canLaunch(widget.url)) {
+                await customTabs.launch(
+                  widget.url,
+                  option: customTabs.CustomTabsOption(),
+                );
               }
             }
           : null,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../circle.dart';
 import 'details.dart';
 
@@ -6,10 +7,10 @@ import 'details.dart';
 moveToDetailPage(BuildContext context, Circle circle) {
   return Navigator.push(
     context,
-    new MaterialPageRoute(
-      builder: (context) => new DetailsPage(
-            circle: circle,
-          ),
+    MaterialPageRoute(
+      builder: (context) => DetailsPage(
+        circle: circle,
+      ),
     ),
   );
 }

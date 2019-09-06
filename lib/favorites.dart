@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 import 'circle.dart';
 
 /// お気に入りに入れたサークルを保持する。
-List<Circle> favorites = new List();
+List<Circle> favorites = List();
 
 /// サークルのお気に入り状態を切り替える。
 toggleFavorite(Circle circle, bool willBeFavorited) {
@@ -44,5 +44,5 @@ Future<void> _saveFavorites() async {
 
 Future<File> get _favoritesFile async {
   final directory = await getApplicationDocumentsDirectory();
-  return new File('${directory.path}/favorites.json');
+  return File('${directory.path}/favorites.json');
 }

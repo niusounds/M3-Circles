@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../circle.dart';
 import '../circle_list.dart';
 import '../favorites.dart';
@@ -18,7 +19,7 @@ class SearchPage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return new _SearchPageState();
+    return _SearchPageState();
   }
 }
 
@@ -52,10 +53,10 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         // 検索入力欄
-        title: new TextField(
+        title: TextField(
           autofocus: true,
           style: const TextStyle(
             color: Colors.white,
@@ -65,7 +66,7 @@ class _SearchPageState extends State<SearchPage> {
           onChanged: _search,
         ),
       ),
-      body: new CircleList(
+      body: CircleList(
         circles: _filtered,
         onToggleFavorite: _onToggleFavorite,
         onTap: (circle) {

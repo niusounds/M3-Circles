@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'circle.dart';
 import 'favorites.dart';
 
@@ -16,13 +17,13 @@ class CircleList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new ListView.builder(
+    return ListView.builder(
       padding: EdgeInsets.only(top: 16.0),
       itemCount: circles.length * 2, // アイテム数の2倍の行数を描画する
       itemBuilder: (context, i) {
         // 奇数行にセパレーターを描画する
         if (i % 2 == 1) {
-          return new Divider();
+          return Divider();
         }
 
         // 実際のインデックス数
@@ -30,17 +31,17 @@ class CircleList extends StatelessWidget {
         final circle = circles[index];
         final isFavorited = favorites.contains(circle);
 
-        return new ListTile(
+        return ListTile(
           // スペース番号
-          leading: new Text(
+          leading: Text(
             '${circle.space.group} -\n${circle.space.number}',
           ),
 
           // サークル名
-          title: new Text(circle.name),
+          title: Text(circle.name),
 
           // 説明文
-          subtitle: new Text(
+          subtitle: Text(
             circle.pr,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,
@@ -48,8 +49,8 @@ class CircleList extends StatelessWidget {
 
           // お気に入り状態
           trailing: favorites != null
-              ? new IconButton(
-                  icon: new Icon(isFavorited ? Icons.star : Icons.star_border),
+              ? IconButton(
+                  icon: Icon(isFavorited ? Icons.star : Icons.star_border),
 
                   // お気に入り状態変更のコールバック
                   onPressed: () {
@@ -58,7 +59,7 @@ class CircleList extends StatelessWidget {
                     }
                   },
                 )
-              : new Space(),
+              : Space(),
 
           // サークル選択時のコールバック
           onTap: () {
