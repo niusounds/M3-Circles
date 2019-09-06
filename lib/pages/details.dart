@@ -1,13 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as customTabs;
+import 'package:url_launcher/url_launcher.dart' as urlLauncher;
 
 import '../circle.dart';
 
 class DetailsPage extends StatelessWidget {
+  static Future<void> open({
+    @required BuildContext context,
+    @required Circle circle,
+  }) {
+    assert(context != null);
+    assert(circle != null);
+
+    return Navigator.pushNamed(
+      context,
+      '/circle_detail',
+      arguments: circle,
+    );
+  }
+
   final Circle circle;
 
-  const DetailsPage({Key key, this.circle}) : super(key: key);
+  const DetailsPage({
+    Key key,
+    @required this.circle,
+  })  : assert(circle != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +44,11 @@ class DetailsPage extends StatelessWidget {
 class CircleCard extends StatelessWidget {
   final Circle circle;
 
-  const CircleCard({Key key, this.circle}) : super(key: key);
+  const CircleCard({
+    Key key,
+    @required this.circle,
+  })  : assert(circle != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) => Card(
@@ -45,67 +67,54 @@ class CircleCard extends StatelessWidget {
               child: Text(circle.pr),
             ),
             Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
               child: Text(
                 'キーワード: ${circle.keywords.join(', ')}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 12.0,
                   color: Colors.grey,
                 ),
               ),
             ),
-            ButtonTheme.bar(
-              child: ButtonBar(
-                children: <Widget>[
-                  WebsiteButton(
-                    url: circle.website.url,
-                  )
-                ],
-              ),
+            ButtonBar(
+              children: <Widget>[
+                WebsiteButton(
+                  url: circle.website.url,
+                )
+              ],
             ),
           ],
         ),
       );
 }
 
-class WebsiteButton extends StatefulWidget {
+class WebsiteButton extends StatelessWidget {
   final String url;
 
-  const WebsiteButton({Key key, this.url}) : super(key: key);
-
-  @override
-  State<StatefulWidget> createState() => WebsiteButtonState();
-}
-
-class WebsiteButtonState extends State<WebsiteButton> {
-  bool enabled;
-
-  @override
-  void initState() {
-    super.initState();
-    enabled = false;
-
-    urlLauncher.canLaunch(widget.url).then((result) {
-      setState(() {
-        enabled = result;
-      });
-    });
-  }
+  const WebsiteButton({
+    Key key,
+    @required this.url,
+  })  : assert(url != null),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      child: const Text('Webサイトを開く'),
-      onPressed: enabled
-          ? () async {
-              if (await urlLauncher.canLaunch(widget.url)) {
-                await customTabs.launch(
-                  widget.url,
-                  option: customTabs.CustomTabsOption(),
-                );
-              }
-            }
-          : null,
+    return FutureBuilder<bool>(
+      future: urlLauncher.canLaunch(url),
+      builder: (context, snapshot) {
+        final enabled = snapshot.hasData ? snapshot.data : false;
+        return FlatButton(
+          child: const Text('Webサイトを開く'),
+          onPressed: enabled ? _onPressed : null,
+        );
+      },
+    );
+  }
+
+  _onPressed() {
+    customTabs.launch(
+      url,
+      option: customTabs.CustomTabsOption(),
     );
   }
 }

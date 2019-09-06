@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:m3circles/pages/details.dart';
 
 import '../circle.dart';
 import '../circle_list.dart';
 import '../favorites.dart';
-import 'transition.dart';
 
 bool insensitiveEqual(String a, String b) => a.toUpperCase() == b.toUpperCase();
 bool insensitiveContains(String a, String b) =>
     a.toUpperCase().contains(b.toUpperCase());
 
 class SearchPage extends StatefulWidget {
+  static Future<void> open({
+    @required BuildContext context,
+    @required List<Circle> masterData,
+  }) {
+    return Navigator.pushNamed(
+      context,
+      '/search',
+      arguments: masterData,
+    );
+  }
+
   final List<Circle> masterData;
 
   const SearchPage({
     Key key,
-    this.masterData,
-  }) : super(key: key);
+    @required this.masterData,
+  })  : assert(masterData != null),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -70,7 +82,10 @@ class _SearchPageState extends State<SearchPage> {
         circles: _filtered,
         onToggleFavorite: _onToggleFavorite,
         onTap: (circle) {
-          moveToDetailPage(context, circle);
+          DetailsPage.open(
+            context: context,
+            circle: circle,
+          );
         },
       ),
     );

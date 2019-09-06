@@ -27,15 +27,16 @@ class Circle {
   final List<String> keywords;
   final String pr;
 
-  Circle(
-      {this.hall,
-      this.space,
-      this.website,
-      this.name,
-      this.pronounciation,
-      this.genre,
-      this.keywords,
-      this.pr});
+  const Circle({
+    this.hall,
+    this.space,
+    this.website,
+    this.name,
+    this.pronounciation,
+    this.genre,
+    this.keywords,
+    this.pr,
+  });
 
   Map toJson() {
     return Map()
@@ -105,7 +106,10 @@ class Space {
   final String group;
   final String number;
 
-  Space({this.group, this.number});
+  const Space({
+    this.group,
+    this.number,
+  });
 
   Map toJson() {
     return Map()
@@ -121,7 +125,10 @@ class Website {
   final String url;
   final String name;
 
-  Website({this.url, this.name});
+  const Website({
+    this.url,
+    this.name,
+  });
 
   Map toJson() {
     return Map()

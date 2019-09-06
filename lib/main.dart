@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'circle.dart';
 import 'circle_list.dart';
 import 'favorites.dart';
+import 'pages/details.dart';
 import 'pages/search.dart';
-import 'pages/transition.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,14 +14,33 @@ class MyApp extends StatelessWidget {
   @override
   build(BuildContext context) => MaterialApp(
         title: 'M3 Circles',
+        routes: {
+          '/': (context) => const MyHomePage(),
+          '/search': (context) {
+            final List<Circle> masterData =
+                ModalRoute.of(context).settings.arguments;
+            return SearchPage(
+              masterData: masterData,
+            );
+          },
+          '/circle_detail': (context) {
+            final Circle circle = ModalRoute.of(context).settings.arguments;
+            return DetailsPage(
+              circle: circle,
+            );
+          },
+        },
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: MyHomePage(),
       );
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({
+    Key key,
+  }) : super(key: key);
+
   final title = 'M3 Circles';
 
   @override
@@ -69,7 +88,10 @@ class MyAppState extends State<MyHomePage> {
   }
 
   _moveToDetails(Circle circle) {
-    moveToDetailPage(context, circle);
+    DetailsPage.open(
+      context: context,
+      circle: circle,
+    );
   }
 
   @override
@@ -89,7 +111,7 @@ class MyAppState extends State<MyHomePage> {
             length: 3,
             child: Scaffold(
               appBar: AppBar(
-                bottom: TabBar(
+                bottom: const TabBar(
                   tabs: <Widget>[
                     Tab(text: '第一展示場'),
                     Tab(text: '第二展示場'),
@@ -128,16 +150,12 @@ class MyAppState extends State<MyHomePage> {
                 ],
               ),
               floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.search),
+                child: const Icon(Icons.search),
                 onPressed: () async {
                   // 検索画面に遷移する
-                  await Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => SearchPage(
-                        masterData: allCircles,
-                      ),
-                    ),
+                  await SearchPage.open(
+                    context: context,
+                    masterData: allCircles,
                   );
                   // 戻ってきたら状態を更新する
                   setState(() {});

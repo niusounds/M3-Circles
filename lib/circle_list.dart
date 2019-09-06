@@ -17,17 +17,11 @@ class CircleList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: EdgeInsets.only(top: 16.0),
-      itemCount: circles.length * 2, // アイテム数の2倍の行数を描画する
-      itemBuilder: (context, i) {
-        // 奇数行にセパレーターを描画する
-        if (i % 2 == 1) {
-          return Divider();
-        }
-
-        // 実際のインデックス数
-        final index = i ~/ 2;
+    return ListView.separated(
+      padding: const EdgeInsets.symmetric(vertical: 16.0),
+      itemCount: circles.length,
+      separatorBuilder: (context, i) => const Divider(),
+      itemBuilder: (context, index) {
         final circle = circles[index];
         final isFavorited = favorites.contains(circle);
 
@@ -48,18 +42,16 @@ class CircleList extends StatelessWidget {
           ),
 
           // お気に入り状態
-          trailing: favorites != null
-              ? IconButton(
-                  icon: Icon(isFavorited ? Icons.star : Icons.star_border),
+          trailing: IconButton(
+            icon: Icon(isFavorited ? Icons.star : Icons.star_border),
 
-                  // お気に入り状態変更のコールバック
-                  onPressed: () {
-                    if (onToggleFavorite != null) {
-                      onToggleFavorite(circle, !isFavorited);
-                    }
-                  },
-                )
-              : Space(),
+            // お気に入り状態変更のコールバック
+            onPressed: () {
+              if (onToggleFavorite != null) {
+                onToggleFavorite(circle, !isFavorited);
+              }
+            },
+          ),
 
           // サークル選択時のコールバック
           onTap: () {
