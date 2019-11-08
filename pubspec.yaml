@@ -1,6 +1,12 @@
 name: m3circles
 description: M3 Circle list viewer.
 
+version: 2.0.1+1
+
+environment:
+  sdk: ">=2.5.0 <3.0.0"
+  flutter: 1.9.1+hotfix.6
+
 dependencies:
   flutter:
     sdk: flutter
