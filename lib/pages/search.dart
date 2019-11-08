@@ -1,24 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:m3circles/pages/details.dart';
+
 import '../circle.dart';
 import '../circle_list.dart';
 import '../favorites.dart';
-import 'transition.dart';
 
 bool insensitiveEqual(String a, String b) => a.toUpperCase() == b.toUpperCase();
 bool insensitiveContains(String a, String b) =>
     a.toUpperCase().contains(b.toUpperCase());
 
 class SearchPage extends StatefulWidget {
+  static Future<void> open({
+    @required BuildContext context,
+    @required List<Circle> masterData,
+  }) {
+    return Navigator.pushNamed(
+      context,
+      '/search',
+      arguments: masterData,
+    );
+  }
+
   final List<Circle> masterData;
 
   const SearchPage({
     Key key,
-    this.masterData,
-  }) : super(key: key);
+    @required this.masterData,
+  })  : assert(masterData != null),
+        super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return new _SearchPageState();
+    return _SearchPageState();
   }
 }
 
@@ -52,10 +65,10 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
+    return Scaffold(
+      appBar: AppBar(
         // 検索入力欄
-        title: new TextField(
+        title: TextField(
           autofocus: true,
           style: const TextStyle(
             color: Colors.white,
@@ -65,11 +78,14 @@ class _SearchPageState extends State<SearchPage> {
           onChanged: _search,
         ),
       ),
-      body: new CircleList(
+      body: CircleList(
         circles: _filtered,
         onToggleFavorite: _onToggleFavorite,
         onTap: (circle) {
-          moveToDetailPage(context, circle);
+          DetailsPage.open(
+            context: context,
+            circle: circle,
+          );
         },
       ),
     );

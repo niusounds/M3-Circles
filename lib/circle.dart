@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:flutter/services.dart';
 import 'package:quiver/core.dart';
 
@@ -26,18 +27,19 @@ class Circle {
   final List<String> keywords;
   final String pr;
 
-  Circle(
-      {this.hall,
-      this.space,
-      this.website,
-      this.name,
-      this.pronounciation,
-      this.genre,
-      this.keywords,
-      this.pr});
+  const Circle({
+    this.hall,
+    this.space,
+    this.website,
+    this.name,
+    this.pronounciation,
+    this.genre,
+    this.keywords,
+    this.pr,
+  });
 
   Map toJson() {
-    return new Map()
+    return Map()
       ..['hall'] = hall
       ..['space'] = space
       ..['website'] = website
@@ -73,18 +75,18 @@ class Circle {
     final List<dynamic> rawCircles = json.decode(jsonStr);
 
     final circles = rawCircles.map((rawCircle) {
-      return new Circle(
+      return Circle(
         name: rawCircle['name'],
         pronounciation: rawCircle['pronounciation'],
         pr: rawCircle['pr'],
         keywords: List.castFrom(rawCircle['keywords']),
         hall: rawCircle['hall'],
         genre: rawCircle['genre'],
-        space: new Space(
+        space: Space(
           group: rawCircle['space']['group'],
           number: rawCircle['space']['number'],
         ),
-        website: new Website(
+        website: Website(
           name: rawCircle['website']['name'],
           url: rawCircle['website']['url'],
         ),
@@ -104,10 +106,13 @@ class Space {
   final String group;
   final String number;
 
-  Space({this.group, this.number});
+  const Space({
+    this.group,
+    this.number,
+  });
 
   Map toJson() {
-    return new Map()
+    return Map()
       ..['group'] = group
       ..['number'] = number;
   }
@@ -120,10 +125,13 @@ class Website {
   final String url;
   final String name;
 
-  Website({this.url, this.name});
+  const Website({
+    this.url,
+    this.name,
+  });
 
   Map toJson() {
-    return new Map()
+    return Map()
       ..['url'] = url
       ..['name'] = name;
   }

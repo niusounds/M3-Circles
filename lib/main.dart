@@ -1,35 +1,51 @@
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' show rootBundle;
-import 'package:url_launcher/url_launcher.dart';
-import 'package:path_provider/path_provider.dart';
+
 import 'circle.dart';
 import 'circle_list.dart';
 import 'favorites.dart';
+import 'pages/details.dart';
 import 'pages/search.dart';
-import 'pages/transition.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key key}) : super(key: key);
+
   @override
-  build(BuildContext context) => new MaterialApp(
+  build(BuildContext context) => MaterialApp(
         title: 'M3 Circles',
-        theme: new ThemeData(
+        routes: {
+          '/': (context) => const MyHomePage(),
+          '/search': (context) {
+            final List<Circle> masterData =
+                ModalRoute.of(context).settings.arguments;
+            return SearchPage(
+              masterData: masterData,
+            );
+          },
+          '/circle_detail': (context) {
+            final Circle circle = ModalRoute.of(context).settings.arguments;
+            return DetailsPage(
+              circle: circle,
+            );
+          },
+        },
+        theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: new MyHomePage(),
       );
 }
 
 class MyHomePage extends StatefulWidget {
+  const MyHomePage({
+    Key key,
+  }) : super(key: key);
+
   final title = 'M3 Circles';
 
   @override
   State<StatefulWidget> createState() {
-    return new MyAppState();
+    return MyAppState();
   }
 }
 
@@ -72,55 +88,58 @@ class MyAppState extends State<MyHomePage> {
   }
 
   _moveToDetails(Circle circle) {
-    moveToDetailPage(context, circle);
+    DetailsPage.open(
+      context: context,
+      circle: circle,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return loading
         // 読み込み中の表示
-        ? new Scaffold(
-            appBar: new AppBar(
-              title: new Text(widget.title),
+        ? Scaffold(
+            appBar: AppBar(
+              title: Text(widget.title),
             ),
-            body: new Center(
-              child: new CircularProgressIndicator(),
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
           )
         // 読み込み完了後の表示
-        : new DefaultTabController(
+        : DefaultTabController(
             length: 3,
-            child: new Scaffold(
-              appBar: new AppBar(
-                bottom: new TabBar(
+            child: Scaffold(
+              appBar: AppBar(
+                bottom: const TabBar(
                   tabs: <Widget>[
-                    new Tab(text: '第一展示場'),
-                    new Tab(text: '第二展示場'),
-                    new Tab(text: 'お気に入り'),
+                    Tab(text: '第一展示場'),
+                    Tab(text: '第二展示場'),
+                    Tab(text: 'お気に入り'),
                   ],
                 ),
-                title: new Text(widget.title),
+                title: Text(widget.title),
               ),
-              body: new TabBarView(
+              body: TabBarView(
                 children: <Widget>[
-                  new CircleList(
+                  CircleList(
                     circles: firstHall,
                     onToggleFavorite: _onToggleFavorite,
                     onTap: _moveToDetails,
                   ),
-                  new CircleList(
+                  CircleList(
                     circles: secondHall,
                     onToggleFavorite: _onToggleFavorite,
                     onTap: _moveToDetails,
                   ),
                   favorites.length > 0
-                      ? new CircleList(
+                      ? CircleList(
                           circles: favorites,
                           onToggleFavorite: _onToggleFavorite,
                           onTap: _moveToDetails,
                         )
-                      : new Center(
-                          child: new Container(
+                      : Center(
+                          child: Container(
                             padding: EdgeInsets.all(16.0),
                             child: const Text(
                               'お気に入りに登録されているサークルはありません。サークルリストの☆をタップしてお気に入りに登録してください。',
@@ -130,17 +149,13 @@ class MyAppState extends State<MyHomePage> {
                         ),
                 ],
               ),
-              floatingActionButton: new FloatingActionButton(
-                child: new Icon(Icons.search),
+              floatingActionButton: FloatingActionButton(
+                child: const Icon(Icons.search),
                 onPressed: () async {
                   // 検索画面に遷移する
-                  await Navigator.push(
-                    context,
-                    new MaterialPageRoute(
-                      builder: (context) => new SearchPage(
-                            masterData: allCircles,
-                          ),
-                    ),
+                  await SearchPage.open(
+                    context: context,
+                    masterData: allCircles,
                   );
                   // 戻ってきたら状態を更新する
                   setState(() {});
