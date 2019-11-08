@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'circle.dart';
-import 'favorites.dart';
+import 'package:m3circles/data.dart';
 
 class CircleList extends StatelessWidget {
   final List<Circle> circles;

@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as customTabs;
+import 'package:m3circles/data.dart';
 import 'package:url_launcher/url_launcher.dart' as urlLauncher;
-
-import '../circle.dart';
 
 class DetailsPage extends StatelessWidget {
   static Future<void> open({

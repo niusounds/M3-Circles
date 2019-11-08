@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:m3circles/pages/details.dart';
-
-import '../circle.dart';
-import '../circle_list.dart';
-import '../favorites.dart';
+import 'package:m3circles/data.dart';
+import 'package:m3circles/pages.dart';
+import 'package:m3circles/widgets.dart';
 
 bool insensitiveEqual(String a, String b) => a.toUpperCase() == b.toUpperCase();
 bool insensitiveContains(String a, String b) =>

@@ -3,38 +3,8 @@ import 'package:m3circles/data.dart';
 import 'package:m3circles/pages.dart';
 import 'package:m3circles/widgets.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key key}) : super(key: key);
-
-  @override
-  build(BuildContext context) => MaterialApp(
-        title: 'M3 Circles',
-        routes: {
-          '/': (context) => const MyHomePage(),
-          '/search': (context) {
-            final List<Circle> masterData =
-                ModalRoute.of(context).settings.arguments;
-            return SearchPage(
-              masterData: masterData,
-            );
-          },
-          '/circle_detail': (context) {
-            final Circle circle = ModalRoute.of(context).settings.arguments;
-            return DetailsPage(
-              circle: circle,
-            );
-          },
-        },
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
-      );
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({
+class HomePage extends StatefulWidget {
+  const HomePage({
     Key key,
   }) : super(key: key);
 
@@ -42,11 +12,11 @@ class MyHomePage extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return MyAppState();
+    return _HomePageState();
   }
 }
 
-class MyAppState extends State<MyHomePage> {
+class _HomePageState extends State<HomePage> {
   // 読み込み中かどうか
   bool loading = true;
 
