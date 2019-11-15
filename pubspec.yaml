@@ -15,10 +15,13 @@ dependencies:
   path_provider: ^1.4.0
   flutter_custom_tabs: ^0.6.0
   quiver: 2.0.5
+  moor_flutter: # use the latest version
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  moor_generator: # use the latest version
+  build_runner: 
 
 flutter:
   uses-material-design: true
